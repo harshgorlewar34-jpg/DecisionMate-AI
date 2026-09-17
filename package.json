@@ -1,6 +1,7 @@
 {
   "name": "decisionmate-ai",
   "version": "1.0.0",
+  "type": "module",
   "description": "DecisionMate AI – AI-Based Personal Decision Support Chatbot",
   "scripts": {
     "dev:backend": "npm --prefix backend run dev",

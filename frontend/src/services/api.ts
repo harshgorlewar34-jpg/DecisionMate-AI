@@ -1,6 +1,6 @@
 import { DecisionState, ComparisonAnalysis, ProviderSettings } from '../types';
 
-const API_BASE = '/api';
+const API_BASE = (((import.meta as any).env?.VITE_API_URL as string) || '/api').replace(/\/+$/, '');
 
 export interface ChatApiResponse {
   reply: string;

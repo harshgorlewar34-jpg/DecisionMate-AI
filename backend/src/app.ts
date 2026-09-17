@@ -1,5 +1,7 @@
 import express from 'express';
 import cors from 'cors';
+import path from 'path';
+import fs from 'fs';
 import chatRoutes from './routes/chat.js';
 import decisionRoutes from './routes/decision.js';
 import healthRoutes from './routes/health.js';
@@ -35,9 +37,30 @@ export const createApp = () => {
   app.use('/health', healthRoutes);
 
   // Root health fallback
-  app.get(['/', '/api'], (req, res) => {
+  app.get(['/api/ping', '/ping'], (req, res) => {
     res.status(200).json({ status: 'ok', name: 'DecisionMate AI API', timestamp: new Date().toISOString() });
   });
+
+  // Serve compiled frontend if running as full-stack server
+  const candidates = [
+    path.resolve(process.cwd(), 'frontend', 'dist'),
+    path.resolve(process.cwd(), '..', 'frontend', 'dist')
+  ];
+  const frontendDist = candidates.find(dir => fs.existsSync(dir));
+
+  if (frontendDist) {
+    app.use(express.static(frontendDist));
+    app.get('*', (req, res, next) => {
+      if (req.path.startsWith('/api') || req.path.startsWith('/chat') || req.path.startsWith('/decision') || req.path.startsWith('/health')) {
+        return next();
+      }
+      res.sendFile(path.join(frontendDist, 'index.html'));
+    });
+  } else {
+    app.get(['/', '/api'], (req, res) => {
+      res.status(200).json({ status: 'ok', name: 'DecisionMate AI API', timestamp: new Date().toISOString() });
+    });
+  }
 
   // Global error handler
   app.use((err: any, req: express.Request, res: express.Response, next: express.NextFunction) => {
