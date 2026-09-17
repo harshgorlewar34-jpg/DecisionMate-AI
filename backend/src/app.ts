@@ -24,10 +24,20 @@ export const createApp = () => {
   app.use(express.json({ limit: '1mb' }));
   app.use(express.urlencoded({ extended: true }));
 
-  // Routes
+  // Routes (support both /api/* and direct routes for Vercel serverless functions)
   app.use('/api/chat', chatRoutes);
+  app.use('/chat', chatRoutes);
+
   app.use('/api/decision', decisionRoutes);
+  app.use('/decision', decisionRoutes);
+
   app.use('/api/health', healthRoutes);
+  app.use('/health', healthRoutes);
+
+  // Root health fallback
+  app.get(['/', '/api'], (req, res) => {
+    res.status(200).json({ status: 'ok', name: 'DecisionMate AI API', timestamp: new Date().toISOString() });
+  });
 
   // Global error handler
   app.use((err: any, req: express.Request, res: express.Response, next: express.NextFunction) => {

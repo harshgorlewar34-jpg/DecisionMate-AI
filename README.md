@@ -146,6 +146,28 @@ DecisionMate AI comes equipped with a triple-engine AI provider architecture:
 
 ---
 
+## 🌐 Deploy to Vercel
+
+DecisionMate AI is fully pre-configured for **1-click zero-config deployment on Vercel**:
+- **Serverless API**: `api/index.ts` automatically runs Express routes on Vercel Serverless Functions.
+- **Frontend SPA**: `frontend/dist` is served with client-side SPA routing via `vercel.json`.
+
+### Steps:
+1. Push your latest code to your GitHub repo (`https://github.com/harshgorlewar34-jpg/DecisionMate-AI`).
+2. Go to [vercel.com](https://vercel.com) and sign in with GitHub.
+3. Click **Add New...** > **Project**.
+4. Import your **`DecisionMate-AI`** repository.
+5. In **Build and Output Settings**, Vercel will automatically detect:
+   - **Framework Preset**: Vite
+   - **Build Command**: `npm run build`
+   - **Output Directory**: `frontend/dist`
+6. *(Optional)* In **Environment Variables**, add:
+   - `GEMINI_API_KEY` (if using Google Gemini)
+   - `OPENAI_API_KEY` (if using OpenAI)
+7. Click **Deploy**!
+
+---
+
 ## 🛡️ Decision Support Disclaimer
 
 DecisionMate AI is designed to assist personal decision making by structuring trade-offs and options. It does not replace certified professional legal, medical, or high-stakes financial counsel.
